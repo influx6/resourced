@@ -4,7 +4,7 @@
 
 ## Installation
  	
-	npm install resourced
+	npm install resourcedjs
 
 ## Examples
 

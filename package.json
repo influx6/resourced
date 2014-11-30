@@ -1,5 +1,5 @@
 {
-  "name": "resourced",
+  "name": "resourcedjs",
   "version": "0.0.3",
   "description": "a simple restful resource url mapper",
   "main": "resourced.js",
