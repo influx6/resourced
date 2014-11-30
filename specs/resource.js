@@ -11,6 +11,7 @@ _.Jazz('Resourced specs',function($){
       }).use(res);
     });
 
+
     res.use({
 
       findOne: function(req){
@@ -92,4 +93,16 @@ _.Jazz('Resourced specs',function($){
     res.request('/users/comments','get');
     res.request('/users/comments/1','put');
 
+    res.on('badRequest:Provider',function(c){
+      $('can i stop watching for "get" on /users/comments a resource',function(r){
+        r.sync(function(f,g){
+          _.Expects.isObject(f);
+          _.Expects.truthy(f.payload);
+          _.Expects.falsy(f.provider);
+        }).use(c);
+      });
+    });
+
+    res.remove('/users/comments','get',true);
+    res.request('/users/comments/1','put');
 });
