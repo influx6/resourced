@@ -10,37 +10,39 @@
 
 Lets require and setup our resourced object for restful mapping:
 
- 
-   var resd = require('resourced');
+	
+ 	  var resd = require('resourced');
 
-   var res = resd.make('Users',{});
-   res.use({
-  	find: function(){ 
-  		/* handles all get request for /users on http 'get' method */
-  	},
-  	findOne: function(){ 
-  		/* handles all get request for /users/:id on http 'get' method */
-  	},
-  	update: function(){ 
-  		/* handles all get request for /users/:id on http 'put* method/
-  	},
-  	create: function(){ 
-  		/* handles all get request for /users on http 'post' method */
-  	},
-  	destroy: function(){ 
-  		/* handles all get request for /users/:id on http 'delete' method */
-  	},
-  	patch: function(){ 
-  		/* handles all get request for /users/:id on http 'patch' method */
-  	},
-  	track: function(){ 
-	    /* handles all get request for /users and /users/:id on http 'track' method */
-	},
-  	trackAll: function(){ 
-	   /* handles all get request for /users on http 'track' method */
-	},
-   });
- 
+   	  var res = resd.make('Users',{});
+   
+   	  res.use({
+  		find: function(){ 
+  			/* handles all get request for /users on http 'get' method */
+  		},
+  		findOne: function(){ 
+  			/* handles all get request for /users/:id on http 'get' method */
+  		},
+  		update: function(){ 
+  			/* handles all get request for /users/:id on http 'put' method */
+  		},
+  		create: function(){ 
+  			/* handles all get request for /users on http 'post' method */
+  		},
+  		destroy: function(){ 
+  			/* handles all get request for /users/:id on http 'delete' method */
+  		},
+  		patch: function(){ 
+  			/* handles all get request for /users/:id on http 'patch' method */
+  		},
+  		track: function(){ 
+	    		/* handles all get request for /users and /users/:id on http 'track' method */
+		},
+  		trackAll: function(){ 
+	   		/* handles all get request for /users on http 'track' method */
+		},
+   	  });
+ 	
+ 	
 
 Lets include a embedded model also:
 
@@ -69,7 +71,7 @@ Now we can make a series of requests and see how it behave nicely.
     
 
  
-Lets add a custom route with a custom mapping:
+Lets add a custom route with a custom mapping: (Routd: http://github.com/influx6/routd - resourced internal router)
 
  
 
@@ -81,19 +83,23 @@ Lets add a custom route with a custom mapping:
      	route: the route to be used
      	mapping: the function name to use as the mapping provider
      	routerConfig: a map({}) containing configuration for the internal router as to this route,look to
-     	'https://github.com/influx/routd' for more information
+     	Routd github page for more information
     */
     
     res.add('get','/users/:name','findName',{ 
-   	validators: { name: function(f){ return typeof f === 'string'; } 
+    	   exactMatch: false,
+    	   params:{
+    	        name: 'string'
+    	   },
+   	   validators: { 
+   	   	name: function(f){ return typeof f === 'string'; }
+   	   }
     });
    
     res.use({
-    
-     findName: function(){
-    	// deal with all /users/:name route calls on the http 'get' method
-     }
-    
+     	findName: function(){
+    		// deal with all /users/:name route calls on the http 'get' method
+     	}
     });
    
 
@@ -101,7 +107,7 @@ Lets add a custom route with a custom mapping:
  
 Now all request of the type '/users/:string', will be directed to the function 'findName'.
 
-We can eqauly stop listening for specific requests type. Lets stop listening for get request 
+We can eqauly stop listening for specific requests type. Lets stop listening for 'get' request 
 for our comments embedded route:
  
 
@@ -112,6 +118,10 @@ for our comments embedded route:
      	method: the specific method to stop watching
      	shouldRemoveInRouter: should just stop listening for the route in the router,makes the method of no effect as it overrides all methods
     */
-    res.remove('/users/comments','get',true); 
-    res.request('/users/comments/1','put'); //request is not dealt with but transfered to badRequest:Provider
+    
+    res.remove('/users/comments','get',/* true | false */); 
+    
+    res.request('/users/comments/1','put'); 
+    
+The last request is not dealt with but is transfered to badRequest:Provider listener, unless the 'default' provider mapping is changed to perform a different action.
     	
