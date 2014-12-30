@@ -1,6 +1,6 @@
 {
   "name": "resourcedjs",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "a simple restful resource url mapper",
   "main": "resourced.js",
   "scripts": {
